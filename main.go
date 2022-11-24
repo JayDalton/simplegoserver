@@ -7,12 +7,17 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// go tooldist list
+// go env
+// $env:GOOS=abc
+// $env:GOARCH=xyz
+
 type HttpLambda = func(http.ResponseWriter, *http.Request, httprouter.Params)
 
 func main() {
 	router := httprouter.New()
 
-	router.GET("/", getRoot("huhu ahoi"))
+	router.GET("/", getRoot("Hallo welt!"))
 
 	server := http.Server{Addr: ":3000", Handler: router}
 	err := server.ListenAndServe()
