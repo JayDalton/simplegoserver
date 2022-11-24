@@ -12,6 +12,6 @@ func NewUptime(time time.Time) *Uptime {
 	}
 }
 
-func (uptime Uptime) Value() (int64, string) {
+func (uptime *Uptime) Value() (int64, string) {
 	return time.Since(uptime.start).Milliseconds(), Milliseconds
 }
