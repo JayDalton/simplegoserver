@@ -10,14 +10,14 @@ import (
 
 const HealthName = "/health"
 
-func GetHealth() RouteFunctor {
-	metrics.HttpRequests.Counters[HealthName] = 0
+func GetHealth(collection *metrics.Collection) RouteFunctor {
+	collection.HttpRequests.Counters[HealthName] = 0
 
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		metrics.HttpRequests.Counters[HealthName]++
+		collection.HttpRequests.Counters[HealthName]++
 
-		uptime, unit := metrics.Uptime()
-		reqCounters := metrics.HttpRequests.Counters
+		uptime, unit := collection.Uptime.Value()
+		reqCounters := collection.HttpRequests.Counters
 
 		response := HealthResponse{
 			Uptime:       UptimeResponse{Value: uptime, Unit: unit},

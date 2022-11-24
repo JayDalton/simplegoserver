@@ -1,9 +1,11 @@
 package metrics
 
-type HttpRequestsType struct {
+type HttpRequests struct {
 	Counters map[string]int64
 }
 
-var HttpRequests = HttpRequestsType{
-	Counters: make(map[string]int64),
+func NewHttpRequests() *HttpRequests {
+	return &HttpRequests{
+		Counters: map[string]int64{},
+	}
 }

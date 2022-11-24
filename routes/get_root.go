@@ -9,11 +9,11 @@ import (
 
 const RootName = "/"
 
-func GetRoot(message string) RouteFunctor {
-	metrics.HttpRequests.Counters[RootName] = 0
+func GetRoot(collection *metrics.Collection, message string) RouteFunctor {
+	collection.HttpRequests.Counters[RootName] = 0
 
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		metrics.HttpRequests.Counters[RootName]++
+		collection.HttpRequests.Counters[RootName]++
 
 		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte(message))
