@@ -6,7 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func GetRoot(message string) HttpLambda {
+func GetRoot(message string) RouteFunctor {
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte(message))

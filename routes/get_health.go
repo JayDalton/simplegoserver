@@ -17,7 +17,7 @@ type UptimeResponse struct {
 	Unit  string `json:"unit"`
 }
 
-func GetHealth() HttpLambda {
+func GetHealth() RouteFunctor {
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 		uptime, unit := metrics.Uptime()
 
@@ -34,6 +34,5 @@ func GetHealth() HttpLambda {
 		writer.Header().Set("Content-Type", "application/json")
 		writer.WriteHeader(http.StatusOK)
 		writer.Write(jsonResponse)
-		// writer.Write([]byte(metrics.Uptime().String()))
 	}
 }

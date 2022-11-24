@@ -6,4 +6,4 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type HttpLambda = func(http.ResponseWriter, *http.Request, httprouter.Params)
+type RouteFunctor = func(http.ResponseWriter, *http.Request, httprouter.Params)
