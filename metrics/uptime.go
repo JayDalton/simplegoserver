@@ -8,6 +8,6 @@ func init() {
 	startTime = time.Now()
 }
 
-func Uptime() time.Duration {
-	return time.Since(startTime)
+func Uptime() (int64, string) {
+	return time.Since(startTime).Milliseconds(), Milliseconds
 }

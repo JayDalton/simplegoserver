@@ -3,20 +3,26 @@ package routes
 import (
 	"encoding/json"
 	"net/http"
-	"time"
 
 	"github.com/JayDalton/simplegoserver/metrics"
 	"github.com/julienschmidt/httprouter"
 )
 
 type HealthResponse struct {
-	Uptime time.Duration `json:"uptime"`
+	Uptime UptimeResponse `json:"uptime"`
+}
+
+type UptimeResponse struct {
+	Value int64  `json:"value"`
+	Unit  string `json:"unit"`
 }
 
 func GetHealth() HttpLambda {
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+		uptime, unit := metrics.Uptime()
+
 		response := HealthResponse{
-			Uptime: metrics.Uptime(),
+			Uptime: UptimeResponse{Value: uptime, Unit: unit},
 		}
 
 		jsonResponse, err := json.Marshal(response)
