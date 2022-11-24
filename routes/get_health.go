@@ -8,21 +8,20 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type HealthResponse struct {
-	Uptime UptimeResponse `json:"uptime"`
-}
-
-type UptimeResponse struct {
-	Value int64  `json:"value"`
-	Unit  string `json:"unit"`
-}
+const HealthName = "/health"
 
 func GetHealth() RouteFunctor {
+	metrics.HttpRequests.Counters[HealthName] = 0
+
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+		metrics.HttpRequests.Counters[HealthName]++
+
 		uptime, unit := metrics.Uptime()
+		reqCounters := metrics.HttpRequests.Counters
 
 		response := HealthResponse{
-			Uptime: UptimeResponse{Value: uptime, Unit: unit},
+			Uptime:       UptimeResponse{Value: uptime, Unit: unit},
+			HttpRequests: HttpRequestsResponse{Counters: reqCounters},
 		}
 
 		jsonResponse, err := json.Marshal(response)

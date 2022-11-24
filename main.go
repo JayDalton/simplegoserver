@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// go test -cover ./...
 // go tooldist list
 // go env
 // $env:GOOS=abc
@@ -16,8 +17,8 @@ import (
 func main() {
 	router := httprouter.New()
 
-	router.GET("/", routes.GetRoot("Hallo, Welt!"))
-	router.GET("/health", routes.GetHealth())
+	router.GET(routes.RootName, routes.GetRoot("Hallo, Welt!"))
+	router.GET(routes.HealthName, routes.GetHealth())
 
 	server := http.Server{Addr: ":3000", Handler: router}
 	err := server.ListenAndServe()
