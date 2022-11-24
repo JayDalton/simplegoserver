@@ -11,19 +11,17 @@ import (
 const HealthName = "/health"
 
 func GetHealth(collection *metrics.Collection) RouteFunctor {
-	collection.HttpRequests.Counters[HealthName] = 0
+	collection.HttpRequests.RegisterRoute(HealthName)
 
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		defer func() {
-			collection.HttpRequests.Counters[HealthName]++
-		}()
+		defer collection.HttpRequests.Increment(HealthName)
 
 		uptime, unit := collection.Uptime.Value()
-		reqCounters := collection.HttpRequests.Counters
+		httpRequests := collection.HttpRequests.Value()
 
 		response := HealthResponse{
 			Uptime:       UptimeResponse{Value: uptime, Unit: unit},
-			HttpRequests: HttpRequestsResponse{Counters: reqCounters},
+			HttpRequests: HttpRequestsResponse{Counters: httpRequests},
 		}
 
 		jsonResponse, err := json.Marshal(response)

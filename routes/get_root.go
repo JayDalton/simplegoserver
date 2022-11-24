@@ -10,12 +10,10 @@ import (
 const RootName = "/"
 
 func GetRoot(collection *metrics.Collection, message string) RouteFunctor {
-	collection.HttpRequests.Counters[RootName] = 0
+	collection.HttpRequests.RegisterRoute(RootName)
 
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		defer func() {
-			collection.HttpRequests.Counters[RootName]++
-		}()
+		defer collection.HttpRequests.Increment(RootName)
 
 		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte(message))
