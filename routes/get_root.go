@@ -13,7 +13,9 @@ func GetRoot(collection *metrics.Collection, message string) RouteFunctor {
 	collection.HttpRequests.Counters[RootName] = 0
 
 	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		collection.HttpRequests.Counters[RootName]++
+		defer func() {
+			collection.HttpRequests.Counters[RootName]++
+		}()
 
 		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte(message))
