@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog/log"
 )
 
+type HttpLambda = func(http.ResponseWriter, *http.Request, httprouter.Params)
+
 func main() {
-	fmt.Println("Hallo Welt!")
 	router := httprouter.New()
 
-	router.GET("/", getRoot)
+	router.GET("/", getRoot("huhu ahoi"))
 
 	server := http.Server{Addr: ":3000", Handler: router}
 	err := server.ListenAndServe()
@@ -20,7 +20,9 @@ func main() {
 	log.Fatal().Err(err).Msg("server failed")
 }
 
-func getRoot(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.WriteHeader(http.StatusOK)
-	writer.Write([]byte("Hallo, Welllt!!"))
+func getRoot(message string) HttpLambda {
+	return func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+		writer.WriteHeader(http.StatusOK)
+		writer.Write([]byte(message))
+	}
 }
